@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-summary {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+        }
+
+        .profile-summary h2 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .profile-summary p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .stat-box h3 {
+            font-size: 20px;
+            color: #1e3a8a;
+            margin-bottom: 2px;
+        }
+
+        .stat-box p {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 10px;
+            width: 100%;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            width: 65%;
+            /* Placeholder width */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="app-header">📊 Student Dashboard</div>
+
+        <!-- Content Area -->
+        <div class="app-content">
+
+            <!-- Live Student Profile Banner -->
+            <div class="profile-summary">
+                <h2 id="studentName">Loading Name...</h2>
+                <p id="studentMeta">Roll No: -- | Program: --</p>
+                <p id="studentSem"
+                    style="margin-top: 6px; font-weight: bold; font-size: 11px; background: rgba(255,255,255,0.2); display: inline-block; padding: 2px 8px; border-radius: 4px;">
+                    --</p>
+            </div>
+
+            <!-- Academic Metrics Grid -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h3 id="studentCgpa">--</h3>
+                    <p>Current CGPA</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="studentCredits">--</h3>
+                    <p>Earned Credits</p>
+                </div>
+            </div>
+
+            <!-- Degree Progress Tracker -->
+            <div class="progress-container">
+                <h3 style="font-size: 13px; color: #334155;">Degree Completion Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p style="font-size: 11px; color: #64748b; text-align: right;" id="progressText">-- Completed</p>
+            </div>
+
+            <!-- Next Action Button (Registration Portal Open Alert) -->
+            <div class="ui-card" style="border-left: 4px solid #10b981;">
+                <h3 style="font-size: 14px; color: #065f46; display: flex; align-items: center; gap: 5px;">
+                    🟢 Registration Open
+                </h3>
+                <p style="margin: 6px 0 10px;">Select your Core & Elective subjects for the upcoming term/semester
+                    immediately.</p>
+                <a href="select-courses.html" class="btn-primary">⚡ Choose Next Sem Subjects</a>
+            </div>
+
+        </div>
+
+        <!-- Bottom Mobile Tab Bar -->
+        <div class="bottom-nav">
+            <a href="index.html" class="nav-link">🔍 Explore</a>
+            <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+            <a href="profile.html" class="nav-link">🧑 Profile</a>
+        </div>
+    </div>
+
+    <!-- Load dashboard dynamic script directly -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fetch active student profile data from browser memory
+            const storedData = localStorage.getItem('studentProfile');
+
+            if (!storedData) {
+                alert("Session missing! Please log in first.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const student = JSON.parse(storedData);
+
+            // Map data to HTML View Elements dynamically
+            document.getElementById('studentName').innerText = `👋 ${student.name}`;
+            document.getElementById('studentMeta').innerText = `ID: ${student.rollNo} | ${student.course}`;
+            document.getElementById('studentSem').innerText = student.semester;
+            document.getElementById('studentCgpa').innerText = student.cgpa;
+            document.getElementById('studentCredits').innerText = student.creditsEarned;
+
+            // Custom UI updates for new vs existing old student presentation
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            if (student.creditsEarned === "0" || student.cgpa === "N/A") {
+                // New Student UI Mapping
+                progressFill.style.width = "5%";
+                progressText.innerText = "0% Completed (New admission)";
+            } else {
+                // Existing Student UI Mapping
+                progressFill.style.width = "65%";
+                progressText.innerText = "65% Completed";
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>

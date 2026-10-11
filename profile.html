@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile & Fees Statement</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .avatar-container {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            border: 3px solid #3b82f6;
+        }
+
+        .avatar-container h3 {
+            font-size: 16px;
+            color: #1e293b;
+        }
+
+        .avatar-container p {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            font-size: 12px;
+        }
+
+        .info-row span:first-child {
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .info-row span:last-child {
+            color: #1e293b;
+        }
+
+        .fee-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .badge.paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.pending {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .subject-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin: 3px;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="app-header">🧑 Student Profile Ledger</div>
+
+        <!-- Content Area -->
+        <div class="app-content">
+
+
+            <div class="avatar-container">
+                <div class="avatar">🧑‍🎓</div>
+                <h3 id="profName">Student Name</h3>
+                <p id="profRoll">ID: --</p>
+            </div>
+
+            <!-- Academic & Personal Details Card -->
+            <div class="ui-card">
+                <h3 style="font-size: 13px; color: #1e3a8a; margin-bottom: 10px; text-transform: uppercase;">📋 Personal
+                    Dossier</h3>
+                <div class="info-row"><span>Program</span><span id="profCourse">--</span></div>
+                <div class="info-row"><span>Current Term</span><span id="profSem">--</span></div>
+                <div class="info-row"><span>Email Endpoint</span><span id="profEmail">--</span></div>
+            </div>
+
+            <!-- LIVE REGISTERED SUBJECTS SECTION -->
+            <div class="ui-card">
+                <h3 style="font-size: 13px; color: #1e3a8a; margin-bottom: 8px; text-transform: uppercase;">
+                    📚 Approved Term Courses
+                </h3>
+                <div id="subjectsWrapper">
+                    <!-- Javascript will inject locked courses here dynamically -->
+                </div>
+                <p style="font-size: 11px; color: #64748b; margin-top: 6px; font-weight: 600;" id="profCreditsSummary">
+                    Total Registered Load: -- Credits
+                </p>
+            </div>
+
+            <!-- FINANCIAL STATEMENT LEDGER -->
+            <h3
+                style="font-size: 13px; color: #475569; margin: 15px 0 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                💳 Financial Ledger Statements
+            </h3>
+
+            <!-- Exam Fee Card -->
+            <div class="fee-card">
+                <div>
+                    <h4 style="font-size: 13px; color: #1e293b;">Semester Examination Fees</h4>
+                    <p style="font-size: 11px; color: #64748b;">Invoice Ref: #EX-2026</p>
+                    <p style="font-size: 12px; font-weight: 700; color: #1e293b; margin-top: 2px;">₹2,500</p>
+                </div>
+                <span class="badge paid" id="feeExamBadge">Paid</span>
+            </div>
+
+            <!-- Tuition Fee Card -->
+            <div class="fee-card">
+                <div>
+                    <h4 style="font-size: 13px; color: #1e293b;">Annual Program Tuition Fees</h4>
+                    <p style="font-size: 11px; color: #64748b;">Invoice Ref: #TU-2026</p>
+                    <p style="font-size: 12px; font-weight: 700; color: #1e293b; margin-top: 2px;">₹45,000</p>
+                </div>
+                <span class="badge pending" id="feeTuitionBadge">Pending</span>
+            </div>
+
+            <!-- Logout Action Button Wrapper -->
+            <button class="btn-primary" style="background: #dc2626; margin-top: 15px;" onclick="handleLogout()">
+                🚪 Secure Session Logout
+            </button>
+
+        </div>
+
+        <!-- Bottom Mobile Tab Bar -->
+        <div class="bottom-nav">
+            <a href="index.html" class="nav-link">🔍 Explore</a>
+            <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+            <a href="profile.html" class="nav-link active">🧑 Profile</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Pull session auth metadata properties
+            const storedUser = localStorage.getItem('studentProfile');
+            if (!storedUser) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const student = JSON.parse(storedUser);
+
+            // Populate personal identifiers metrics
+            document.getElementById('profName').innerText = student.name;
+            document.getElementById('profRoll').innerText = `Roll No: ${student.rollNo}`;
+            document.getElementById('profCourse').innerText = student.course;
+            document.getElementById('profSem').innerText = student.semester;
+            document.getElementById('profEmail').innerText = student.email;
+
+            // Map financial dynamic badges metrics based on user matrix
+            document.getElementById('feeExamBadge').innerText = student.examFeeStatus;
+            document.getElementById('feeExamBadge').className = `badge ${student.examFeeStatus.toLowerCase()}`;
+            document.getElementById('feeTuitionBadge').innerText = student.tuitionFeeStatus;
+            document.getElementById('feeTuitionBadge').className = `badge ${student.tuitionFeeStatus.toLowerCase()}`;
+
+            // Inject Dynamic Selected courses locked inside step 4
+            const savedSubjects = localStorage.getItem('selectedSubjects');
+            const savedCredits = localStorage.getItem('totalRegisteredCredits');
+            const wrapper = document.getElementById('subjectsWrapper');
+
+            if (savedSubjects && savedCredits) {
+                const list = JSON.parse(savedSubjects);
+                wrapper.innerHTML = ""; // Clear loader placeholder
+                list.forEach(sub => {
+                    wrapper.innerHTML += `<span class="subject-tag">📖 ${sub}</span>`;
+                });
+                document.getElementById('profCreditsSummary').innerText = `Total Registered Load: ${savedCredits} Credits (Locked)`;
+            } else {
+                wrapper.innerHTML = `<p style="font-size:12px; color:#94a3b8; font-style:italic;">No custom subjects registered for next sem yet.</p>`;
+            }
+        });
+
+        // Handle logout operation context destroy
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out from this session?")) {
+                // Keep the profile blueprint data intact but redirect to clear virtual routing state
+                alert("Session terminated safely.");
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

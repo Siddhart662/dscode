@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Selection Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .credit-tracker {
+            background: #f8fafc;
+            border: 2px dashed #3b82f6;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .credit-counter {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1d4ed8;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            margin: 14px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .subject-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .subject-row.locked {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .subject-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .subject-details {
+            flex: 1;
+        }
+
+        .subject-details h4 {
+            font-size: 13px;
+            color: #1e293b;
+        }
+
+        .subject-details p {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .credit-badge {
+            background: #eff6ff;
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="app-header">⚡ Term Course Selection</div>
+
+        <!-- Content Area -->
+        <div class="app-content">
+
+            <!-- Live Dynamic Credit Tracker -->
+            <div class="credit-tracker">
+                <p style="font-size: 11px; font-weight: 600; color: #64748b;">🎯 Registered Total Credits Limit</p>
+                <div class="credit-counter"><span id="liveCredits">8</span> / 24 Max</div>
+                <p style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Min 12 credits required to submit</p>
+            </div>
+
+            <form id="courseForm" onsubmit="submitSelectedCourses(event)">
+
+                <!-- SECTION A: COMPULSORY CORE SUBJECTS -->
+                <div class="section-title">🔒 Core Subjects (Auto-Locked)</div>
+
+                <div class="subject-row locked">
+                    <input type="checkbox" checked disabled data-credits="4">
+                    <div class="subject-details">
+                        <h4>Compiler Design (CS-301)</h4>
+                        <p>Mandatory foundation for architecture stream.</p>
+                    </div>
+                    <div class="credit-badge">4 Credits</div>
+                </div>
+
+                <div class="subject-row locked">
+                    <input type="checkbox" checked disabled data-credits="4">
+                    <div class="subject-details">
+                        <h4>Computer Networks (CS-302)</h4>
+                        <p>Mandatory foundational networking layers infrastructure.</p>
+                    </div>
+                    <div class="credit-badge">4 Credits</div>
+                </div>
+
+                <!-- SECTION B: ELECTIVE SUBJECTS (CHOOSE MIN 1, MAX 4) -->
+                <div class="section-title">🛠️ Professional Electives (Select Choices)</div>
+
+                <div class="subject-row">
+                    <input type="checkbox" class="elective-cb" id="sub1" data-name="Cyber Security" data-credits="4"
+                        onchange="calculateCredits()">
+                    <div class="subject-details">
+                        <label for="sub1">
+                            <h4>Cyber Security Operations</h4>
+                            <p>Scope: Ethical Hacker, Network Security Analyst.</p>
+                        </label>
+                    </div>
+                    <div class="credit-badge">4 Credits</div>
+                </div>
+
+                <div class="subject-row">
+                    <input type="checkbox" class="elective-cb" id="sub2" data-name="Cloud Computing" data-credits="4"
+                        onchange="calculateCredits()">
+                    <div class="subject-details">
+                        <label for="sub2">
+                            <h4>Cloud Computing & DevOps</h4>
+                            <p>Scope: AWS Infrastructure Management, Systems.</p>
+                        </label>
+                    </div>
+                    <div class="credit-badge">4 Credits</div>
+                </div>
+
+                <div class="subject-row">
+                    <input type="checkbox" class="elective-cb" id="sub3" data-name="Machine Learning" data-credits="4"
+                        onchange="calculateCredits()">
+                    <div class="subject-details">
+                        <label for="sub3">
+                            <h4>Intro to Machine Learning</h4>
+                            <p>Scope: Data Modeling, AI Core Pipelines Development.</p>
+                        </label>
+                    </div>
+                    <div class="credit-badge">4 Credits</div>
+                </div>
+
+                <div class="subject-row">
+                    <input type="checkbox" class="elective-cb" id="sub4" data-name="Mobile App Dev" data-credits="4"
+                        onchange="calculateCredits()">
+                    <div class="subject-details">
+                        <label for="sub4">
+                            <h4>Mobile App Development</h4>
+                            <p>Scope: Flutter Ecosystem, Native UI Engineering.</p>
+                        </label>
+                    </div>
+                    <div class="credit-badge">4 Credits</div>
+                </div>
+
+                <!-- Action Button -->
+                <button type="submit" class="btn-primary" style="margin-top: 20px; background: #10b981;">
+                    💾 Lock & Submit Selection
+                </button>
+            </form>
+
+        </div>
+
+        <!-- Bottom Mobile Tab Bar -->
+        <div class="bottom-nav">
+            <a href="index.html" class="nav-link">🔍 Explore</a>
+            <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+            <a href="profile.html" class="nav-link">🧑 Profile</a>
+        </div>
+    </div>
+
+    <!-- Load Main Application Logic JS Script File -->
+    <script src="js/app.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1. ब्राउज़र की तिजोरी से पहले से सेव किए गए सब्जेक्ट्स निकालें
+            const savedSubjects = localStorage.getItem('selectedSubjects');
+
+            if (savedSubjects) {
+                const list = JSON.parse(savedSubjects);
+
+                // 2. सभी इलेक्टिव चेकबॉक्स को ढूंढें
+                const checkboxes = document.querySelectorAll('.elective-cb');
+
+                checkboxes.forEach(cb => {
+                    const subName = cb.getAttribute('data-name');
+
+                    // 3. अगर यह सब्जेक्ट पहले से सेव लिस्ट में है, तो इसे टिक और लॉक कर दें
+                    if (list.includes(subName)) {
+                        cb.checked = true;
+                        cb.disabled = true; // लॉक करना ताकि दोबारा सबमिट न हो (Optional)
+
+                        // उस रो (Row) का बैकग्राउंड कलर भी बदल दें ताकि यूजर को पता चले यह लॉक्ड है
+                        cb.closest('.subject-row').style.background = '#f1f5f9';
+                        cb.closest('.subject-row').style.borderColor = '#cbd5e1';
+                    }
+                });
+
+                // 4. लाइव क्रेडिट काउंटर को भी अपडेट करें जो तिजोरी में सेव था
+                const savedCredits = localStorage.getItem('totalRegisteredCredits');
+                if (savedCredits) {
+                    document.getElementById('liveCredits').innerText = savedCredits;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
